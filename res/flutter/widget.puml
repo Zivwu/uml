@@ -1,0 +1,104 @@
+@startuml
+set namespaceSeparator ::
+
+abstract class "Widget" {
+  +InvalidType key
+  +int hashCode
+  +Element createElement()
+  +String toStringShort()
+  +void debugFillProperties(InvalidType properties)
+  +bool ==(Object other)
+  {static} +bool canUpdate(Widget oldWidget, Widget newWidget)
+  {static} -int _debugConcreteSubtype(Widget widget)
+}
+
+abstract class "StatelessWidget" {
+  +StatelessElement createElement()
+  +Widget build(BuildContext context)
+}
+
+"Widget" <|-- "StatelessWidget"
+
+abstract class "StatefulWidget" {
+  +StatefulElement createElement()
+  +State<StatefulWidget> createState()
+}
+
+"Widget" <|-- "StatefulWidget"
+
+abstract class "ProxyWidget" {
+  +Widget child
+}
+
+"ProxyWidget" o-- "Widget"
+"Widget" <|-- "ProxyWidget"
+
+abstract class "ParentDataWidget" {
+  +Type debugTypicalAncestorWidgetClass
+  +String debugTypicalAncestorWidgetDescription
+  +ParentDataElement<T> createElement()
+  +bool debugIsValidRenderObject(InvalidType renderObject)
+  -Iterable<InvalidType> _debugDescribeIncorrectParentDataType({required InvalidType parentData, RenderObjectWidget? parentDataCreator, InvalidType ownershipChain})
+  +void applyParentData(InvalidType renderObject)
+  +bool debugCanApplyOutOfTurn()
+}
+
+"ProxyWidget" <|-- "ParentDataWidget"
+
+abstract class "InheritedWidget" {
+  +InheritedElement createElement()
+  +bool updateShouldNotify(InheritedWidget oldWidget)
+}
+
+"ProxyWidget" <|-- "InheritedWidget"
+
+abstract class "RenderObjectWidget" {
+  +RenderObjectElement createElement()
+  +InvalidType createRenderObject(BuildContext context)
+  +void updateRenderObject(BuildContext context, InvalidType renderObject)
+  +void didUnmountRenderObject(InvalidType renderObject)
+}
+
+"Widget" <|-- "RenderObjectWidget"
+
+abstract class "LeafRenderObjectWidget" {
+  +LeafRenderObjectElement createElement()
+}
+
+"RenderObjectWidget" <|-- "LeafRenderObjectWidget"
+
+abstract class "SingleChildRenderObjectWidget" {
+  +Widget? child
+  +SingleChildRenderObjectElement createElement()
+}
+
+"RenderObjectWidget" <|-- "SingleChildRenderObjectWidget"
+
+abstract class "MultiChildRenderObjectWidget" {
+  +List<Widget> children
+  +MultiChildRenderObjectElement createElement()
+}
+
+"RenderObjectWidget" <|-- "MultiChildRenderObjectWidget"
+
+class "ErrorWidget" {
+  {static} +Widget Function(InvalidType) builder
+  +String message
+  -InvalidType _flutterError
+  {static} -Widget _defaultErrorWidgetBuilder(InvalidType details)
+  {static} -String _stringify(Object? exception)
+  +InvalidType createRenderObject(BuildContext context)
+  +void debugFillProperties(InvalidType properties)
+}
+
+"ErrorWidget" o-- "Widget Function(InvalidType)"
+"LeafRenderObjectWidget" <|-- "ErrorWidget"
+
+class "_NullWidget" {
+  +Element createElement()
+}
+
+"Widget" <|-- "_NullWidget"
+
+
+@enduml
