@@ -3,9 +3,12 @@ on:
   push:
     branches:
       - main
+      - test
 jobs:
   generate_plantuml:
     runs-on: ubuntu-latest
+    permissions: # 新增权限配置
+      contents: write  # 允许读写仓库内容
     name: plantuml
     steps:
       - name: checkout
@@ -13,7 +16,5 @@ jobs:
       - name: plantuml
         id: plantuml
         uses: grassedge/generate-plantuml-action@master
-        with:
-          path: res
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
