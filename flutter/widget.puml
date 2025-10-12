@@ -1,0 +1,83 @@
+@startuml
+set namespaceSeparator ::
+
+abstract class Widget {
+  +Key? key
+  +int hashCode
+  +Element createElement()
+  +String toStringShort()
+  +bool ==(Object other)
+  {static} +bool canUpdate()
+}
+
+abstract class StatelessWidget {
+  +StatelessElement createElement()
+  +Widget build()
+}
+
+Widget <|-- StatelessWidget
+
+abstract class StatefulWidget {
+  +StatefulElement createElement()
+  +State<StatefulWidget> createState()
+}
+
+Widget <|-- StatefulWidget
+
+
+
+abstract class RenderObjectWidget {
+  +RenderObjectElement createElement()
+  +RenderObject createRenderObject()
+  +void updateRenderObject()
+  +void didUnmountRenderObject()
+}
+
+Widget <|-- RenderObjectWidget
+
+abstract class LeafRenderObjectWidget {
+  +LeafRenderObjectElement createElement()
+}
+
+RenderObjectWidget <|-- LeafRenderObjectWidget
+
+abstract class SingleChildRenderObjectWidget {
+  +Widget? child
+  +SingleChildRenderObjectElement createElement()
+}
+
+RenderObjectWidget <|-- SingleChildRenderObjectWidget
+
+abstract class MultiChildRenderObjectWidget {
+  +List<Widget> children
+  +MultiChildRenderObjectElement createElement()
+}
+
+RenderObjectWidget <|-- MultiChildRenderObjectWidget
+
+class ErrorWidget {
+  {static} +Widget Function(InvalidType) builder
+  +String message
+  -FlutterError _flutterError
+  {static} -String _stringify()
+  +RenderBox createRenderObject()
+}
+
+LeafRenderObjectWidget <|-- ErrorWidget
+
+abstract class ProxyWidget{
++Widget? child
+}
+
+Widget <|-- ProxyWidget
+
+class RootWidget {
+  +Widget? child
+  +RootElement createElement()
+  +RootElement attach()
+}
+
+Widget <|-- RootWidget
+
+
+@enduml
