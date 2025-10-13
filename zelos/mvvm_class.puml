@@ -1,0 +1,131 @@
+@startuml
+set namespaceSeparator ::
+!pragma layout smetana
+
+class "ZStatusBasePageViewModel<T extend ZBaseState>"  as ViewModel
+class "ZAppLifecycle<T>"  as Lifecycle
+class "ZStatusBasePageState<W extends ZStatusBasePage ,  S extends ZBaseState, VM extends ZStatusBasePageViewModel<S>>" as View::UiState
+class "ZStatusBasePage" as View::Page
+
+abstract class  View::Page  extends View::StatefulWidget{
+  +bool? isNeedAppBar
+}
+
+abstract class View::UiState extends View::State<W> implements View::AutomaticKeepAliveClientMixin, View::ZStatusWidgetMixin{
+  +VM viewModel
+  +S logicState
+  +bool wantKeepAlive
+  +InvalidType systemUiOverlayStyle
+  +bool extendBodyBehindAppBar
+  +InvalidType backgroundColor
+  +double appBarHeight
+  +double? leadingWidth
+  +InvalidType navigationBarColor
+  +bool isNeedLine
+  +double lineHeight
+  +dynamic getBackSlideArguments()
+  +void initState()
+  +void dispose()
+  +InvalidType build()
+  +InvalidType buildBody()
+  +InvalidType buildAppBar()
+  +List<InvalidType>? buildAppBarRightWidget()
+  +bool needAppBar()
+  +VM createViewModel()
+  +dynamic onInitState()
+  +dynamic addPageBackground()
+  +dynamic hideKeyboard()
+  +InvalidType buildBackBtnWidget()
+  +InvalidType buildTitleText()
+  +dynamic onBackClick()
+  +String naviTitle()
+  +bool hasBackArrowBtn()
+  +dynamic onShow()
+  +dynamic onHide()
+}
+note top of View:视图层
+
+
+abstract class Lifecycle extends ChangeNotifier implements WidgetsBindingObserver{
+  -bool _hasHiddenState
+  +void dispose()
+  +void didChangeAppLifecycleState()
+  +void onAppForeground()
+  +void onAppBackground()
+  +void onReady()
+  +void onResumed()
+  +void onInactive()
+  +void onDispose()
+  +void onHidden()
+}
+
+class ViewModel extends Lifecycle{
+  +String tag
+  +T logicState
+  +ZStatusBasePageState uiState
+  +BuildContext context
+  +dynamic analysisParams()
+  +dynamic argumentsAlreadyOK()
+  +dynamic onViewModelInit()
+  +T createState()
+  +void onReady()
+  +void onResumed()
+  +void onHidden()
+  +void onAppForeground()
+  +void onAppBackground()
+  +void onInactive()
+  +void onDispose()
+  +dynamic requestNetData()
+  +dynamic errorNetData()
+  +dynamic hideKeyboard()
+}
+note left of ViewModel : 逻辑处理层
+
+
+class ZBaseState {
+  +bool isLazyRefresh
+  +String zPageTitle
+  +dynamic zPageState
+  +dynamic initState()
+  +dynamic dispose()
+}
+note left : 数据层
+
+abstract class IZStatusPagePlugin $other{
+  +InvalidType buildErrorWidget()
+  +InvalidType buildLoadingWidget()
+  +InvalidType buildEmptyWidget()
+  +InvalidType buildBackBtn()
+}
+
+class ZPageParams $other{
+  +Map<String, String> pathParams
+  +Map<String, String> queryParams
+  +dynamic extra
+}
+
+abstract class IZPageParamsPlugin $other{
+  +ZPageParams analysisParams()
+}
+
+
+interface IZNetworkErrorHandle $other{
+  +ZBaseState pageStatus
+  +dynamic errorNetData()
+}
+
+
+class ZPageStatus $other{
+  +bool isLoading
+  +bool isError
+  +bool isSuccess
+  +bool isEmpty
+  +bool isLoadingMore
+  +String? errorMessage
+  +Object? error
+}
+
+
+
+remove $other
+@enduml
