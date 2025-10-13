@@ -1,0 +1,64 @@
+@startuml
+participant "Timer" as Timer
+participant "WidgetsBinding" as binding
+participant "RootWidget" as rootWidget
+participant "BuildOwner" as buildOwner
+participant "RootElement" as rootElement
+participant "SchedulerBinding" as scheduler
+
+Timer -> binding : attachRootWidget(app)
+activate binding
+
+binding -> rootWidget : new RootWidget(child: app)
+activate rootWidget
+rootWidget -->> binding : 返回 rootWidget 实例
+deactivate rootWidget
+
+binding -> binding : attachToBuildOwner(rootWidget)
+activate binding
+
+binding -> rootWidget : attach(buildOwner, null)
+activate rootWidget
+
+rootWidget -> rootElement : createElement()
+activate rootElement
+rootElement -->> rootWidget : 返回 rootElement 实例
+deactivate rootElement
+
+rootWidget -> rootElement : assignOwner(buildOwner)
+activate rootElement
+deactivate rootElement
+
+rootWidget -> buildOwner : buildScope(rootElement, ...)
+activate buildOwner
+
+buildOwner -> rootElement : mount(null, null)
+activate rootElement
+
+rootElement -> rootElement : _rebuild()
+activate rootElement
+
+note right of rootElement : 调用 updateChild(null, app, null)\n递归构建 Element 树
+rootElement -->> rootElement : 
+deactivate rootElement
+
+rootElement -->> buildOwner : 
+deactivate rootElement
+
+buildOwner -->> rootWidget : 
+deactivate buildOwner
+
+rootWidget -->> binding : 返回 rootElement
+deactivate rootWidget
+
+note over binding : 此时 rootElement 已创建并挂载
+
+binding -> scheduler : ensureVisualUpdate()
+activate scheduler
+note over scheduler : 请求新的一帧进行渲染
+scheduler -->> binding : 
+deactivate scheduler
+
+deactivate binding
+deactivate binding
+@enduml
