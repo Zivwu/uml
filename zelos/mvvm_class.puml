@@ -15,28 +15,28 @@ abstract class View::UiState extends View::State<W> implements View::AutomaticKe
   +VM viewModel
   +S logicState
   +bool wantKeepAlive
-  +InvalidType systemUiOverlayStyle
+  +SystemUiOverlayStyle systemUiOverlayStyle
   +bool extendBodyBehindAppBar
-  +InvalidType backgroundColor
+  +Color backgroundColor
   +double appBarHeight
   +double? leadingWidth
-  +InvalidType navigationBarColor
+  +Color navigationBarColor
   +bool isNeedLine
   +double lineHeight
   +dynamic getBackSlideArguments()
   +void initState()
   +void dispose()
-  +InvalidType build()
-  +InvalidType buildBody()
-  +InvalidType buildAppBar()
-  +List<InvalidType>? buildAppBarRightWidget()
+  +Widget build()
+  +Widget buildBody()
+  +Widget buildAppBar()
+  +List<Widget>? buildAppBarRightWidget()
   +bool needAppBar()
   +VM createViewModel()
   +dynamic onInitState()
   +dynamic addPageBackground()
   +dynamic hideKeyboard()
-  +InvalidType buildBackBtnWidget()
-  +InvalidType buildTitleText()
+  +Widget buildBackBtnWidget()
+  +Widget buildTitleText()
   +dynamic onBackClick()
   +String naviTitle()
   +bool hasBackArrowBtn()
@@ -45,6 +45,19 @@ abstract class View::UiState extends View::State<W> implements View::AutomaticKe
 }
 note top of View:视图层
 
+
+note left of Lifecycle::onAppForeground
+APP进入前台
+end note
+
+note left of Lifecycle::onAppBackground
+APP进入后台
+end note
+
+note left of Lifecycle::onResumed
+程序从后台切换到前台
+后一个页面返回后执行
+end note
 
 abstract class Lifecycle extends ChangeNotifier implements WidgetsBindingObserver{
   -bool _hasHiddenState
@@ -59,6 +72,7 @@ abstract class Lifecycle extends ChangeNotifier implements WidgetsBindingObserve
   +void onHidden()
 }
 
+
 class ViewModel extends Lifecycle{
   +String tag
   +T logicState
@@ -68,6 +82,10 @@ class ViewModel extends Lifecycle{
   +dynamic argumentsAlreadyOK()
   +dynamic onViewModelInit()
   +T createState()
+  +dynamic requestNetData()
+  +dynamic errorNetData()
+  +dynamic hideKeyboard()
+  .. ZAppLifecycle ..
   +void onReady()
   +void onResumed()
   +void onHidden()
@@ -75,9 +93,6 @@ class ViewModel extends Lifecycle{
   +void onAppBackground()
   +void onInactive()
   +void onDispose()
-  +dynamic requestNetData()
-  +dynamic errorNetData()
-  +dynamic hideKeyboard()
 }
 note left of ViewModel : 逻辑处理层
 
