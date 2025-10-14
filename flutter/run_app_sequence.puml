@@ -1,47 +1,29 @@
 @startuml
-autonumber 1.1.1
-actor "用户" as User
-participant "runApp()" as runApp
-participant "WidgetsFlutterBinding" as WidgetsFlutterBinding
-participant "binding" as binding
-participant "Timer" as Timer
-participant "SchedulerBinding" as scheduler
 
-User -> runApp ++: 调用 runApp(MyApp())
 
-runApp -> WidgetsFlutterBinding ++: ensureInitialized()
+participant binding.dart as main
+participant WidgetsFlutterBinding
+participant RootWidget
+
+autonumber 1.1
+main -> main ++ : runApp(Widget app)
+main -> WidgetsFlutterBinding ++ : ensureInitialized
+
 note over WidgetsFlutterBinding : 创建并初始化 binding 实例
 WidgetsFlutterBinding -> WidgetsFlutterBinding ++: 创建并初始化 binding 实例
 return
 return 返回 binding 实例
 
-runApp -> binding : wrapWithDefaultView(app)
-activate binding
-binding -->> runApp : 返回包装后的 Widget
-deactivate binding
-autonumber 2.1.1
-runApp -> binding : scheduleAttachRootWidget(wrappedApp)
-activate binding
-binding -> Timer : run(callback)
-note over Timer : 安排一个异步任务
-binding -->> runApp : 
-deactivate binding
 
-runApp -> scheduler : scheduleWarmUpFrame()
-activate scheduler
-note over scheduler : 请求调度一个热身帧
-scheduler -->> runApp : 
-deactivate scheduler
-deactivate runApp
+main -> WidgetsFlutterBinding ++ : wrapWithDefaultView
+return 返回包装后的View
 
-Timer -> binding : 执行 attachRootWidget()
-activate binding
-note over binding : 创建 RootWidget,\n附加到 BuildOwner,\n构建 Element 树
-binding -> scheduler : ensureVisualUpdate()
-activate scheduler
-note over scheduler : 请求一个新的渲染帧
-scheduler -->> binding : 
-deactivate scheduler
-deactivate binding
+autonumber 2.1
+main -> main :_runWidget()
+main -> WidgetsFlutterBinding ++ : attachRootWidget(Widget app)
+WidgetsFlutterBinding -> Timer : run(callback)
+return
+Timer -> RootWidget : 执行 attachRootWidget()
+
 
 @enduml

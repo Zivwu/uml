@@ -1,15 +1,47 @@
 @startuml
-'https://plantuml.com/sequence-diagram
+autonumber 1.1.1
+actor "用户" as User
+participant "runApp()" as runApp
+participant "WidgetsFlutterBinding" as WidgetsFlutterBinding
+'participant "binding" as binding
+participant "Timer" as Timer
+participant "SchedulerBinding" as scheduler
 
-autonumber
+User -> runApp ++: 调用 runApp(MyApp())
 
-== Initialization ==
+runApp -> WidgetsFlutterBinding ++: ensureInitialized()
+note over WidgetsFlutterBinding : 创建并初始化 binding 实例
+WidgetsFlutterBinding -> WidgetsFlutterBinding ++: 创建并初始化 binding 实例
+return
+return 返回 binding 实例
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+runApp -> binding : wrapWithDefaultView(app)
+activate binding
+binding -->> runApp : 返回包装后的 Widget
+deactivate binding
+autonumber 2.1.1
+runApp -> binding : scheduleAttachRootWidget(wrappedApp)
+activate binding
+binding -> Timer : run(callback)
+note over Timer : 安排一个异步任务
+binding -->> runApp :
+deactivate binding
 
-== Repetition ==
+runApp -> scheduler : scheduleWarmUpFrame()
+activate scheduler
+note over scheduler : 请求调度一个热身帧
+scheduler -->> runApp :
+deactivate scheduler
+deactivate runApp
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+Timer -> binding : 执行 attachRootWidget()
+activate binding
+note over binding : 创建 RootWidget,\n附加到 BuildOwner,\n构建 Element 树
+binding -> scheduler : ensureVisualUpdate()
+activate scheduler
+note over scheduler : 请求一个新的渲染帧
+scheduler -->> binding :
+deactivate scheduler
+deactivate binding
+
 @enduml
