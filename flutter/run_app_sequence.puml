@@ -1,9 +1,13 @@
 @startuml
-
+!pragma layout smetana
 
 participant binding.dart as main
 participant WidgetsFlutterBinding
+participant WidgetsBinding
+participant Timer
 participant RootWidget
+participant RootElement
+participant Element
 
 autonumber 1.1
 main -> main ++ : runApp(Widget app)
@@ -20,10 +24,64 @@ return 返回包装后的View
 
 autonumber 2.1
 main -> main :_runWidget()
-main -> WidgetsFlutterBinding ++ : attachRootWidget(Widget app)
-WidgetsFlutterBinding -> Timer : run(callback)
+main -> WidgetsFlutterBinding ++ : scheduleAttachRootWidget(Widget app)
+WidgetsFlutterBinding --> Timer : run(callback)
 return
-Timer -> RootWidget : 执行 attachRootWidget()
+Timer -> WidgetsBinding ++: 执行 attachRootWidget
+note over WidgetsBinding : 创建RootWidget
+WidgetsBinding -> WidgetsBinding ++:attachToBuildOwner
+WidgetsBinding -> RootWidget ++:attach
+RootWidget -> RootWidget ++:createElement
+return 返回RootElement
+RootWidget -> RootElement ++:mount
+RootElement -> RootElement :super.mount
+RootElement -> RootElement ++ :_rebuild
+RootElement -> Element  ++ :updateChild
+Element -> Element  ++ :inflateWidget
+
+Element -> View ++ :createElement
+View -> StatefulElement ++ :new StatefulElement
+StatefulElement -> View ++ :createState
+return _ViewState
+note right : 赋值给_state
+note over StatefulElement
+state._element = this
+state._widget = widget
+end note
+return 返回 StatefulElement
+return 返回 StatefulElement
+
+Element -> ComponentElement ++ :mount
+ComponentElement -> Element ++ :_firstBuild
+Element -> State  ++ :initState
+note over State  :"initState"
+return
+Element -> State  ++ :didChangeDependencies
+note over State  :"didChangeDependencies"
+return
+Element -> ComponentElement ++ :_firstBuild
+ComponentElement -> ComponentElement  :_firstBuild
+ComponentElement -> Element  ++ :rebuild
+Element -> StatefulElement  ++ :performRebuild
+StatefulElement -> ComponentElement  ++ :performRebuild
+ComponentElement -> StatefulElement  ++ :build
+StatefulElement -> State  ++ :build
+note over  State : build(BuildContext)
+return
+return
+ComponentElement -> Element  ++ :updateChild
+note over Element : 递归更新 Element 子树
+return
+note right  : _child
+
+return
+return
+return
+return
 
 
+
+return _child = Element
+return
+RootElement -> RootElement :super.performRebuild
 @enduml
