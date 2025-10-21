@@ -1,33 +1,13 @@
 @startuml
 !pragma layout smetana
 
-participant binding.dart as main
-participant WidgetsFlutterBinding
 participant WidgetsBinding
-participant Timer
 participant RootWidget
 participant RootElement
 participant Element
 
-autonumber 1.1
-main -> main ++ : runApp(Widget app)
-main -> WidgetsFlutterBinding ++ : ensureInitialized
-
-note over WidgetsFlutterBinding : 创建并初始化 binding 实例
-WidgetsFlutterBinding -> WidgetsFlutterBinding ++: 创建并初始化 binding 实例
-return
-return 返回 binding 实例
 
 
-main -> WidgetsFlutterBinding ++ : wrapWithDefaultView
-return 返回包装后的View
-
-autonumber 2.1
-main -> main :_runWidget()
-main -> WidgetsFlutterBinding ++ : scheduleAttachRootWidget(Widget app)
-WidgetsFlutterBinding --> Timer : run(callback)
-return
-Timer -> WidgetsBinding ++: 执行 attachRootWidget
 note over WidgetsBinding : 创建RootWidget
 WidgetsBinding -> WidgetsBinding ++:attachToBuildOwner
 WidgetsBinding -> RootWidget ++:attach

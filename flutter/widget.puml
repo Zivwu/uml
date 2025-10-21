@@ -1,6 +1,26 @@
 @startuml
 set namespaceSeparator ::
 
+abstract class "State" {
+  -T? _widget
+  -_StateLifecycle _debugLifecycleState
+  -StatefulElement? _element
+  +T widget
+  +BuildContext context
+  +bool mounted
+  -bool _debugTypesAreRight()
+  +void initState()
+  +void didUpdateWidget()
+  +void reassemble()
+  +void setState()
+  +void deactivate()
+  +void activate()
+  +void dispose()
+  +Widget build()
+  +void didChangeDependencies()
+  +void debugFillProperties()
+}
+
 abstract class Widget {
   +Key? key
   +int hashCode
@@ -78,6 +98,7 @@ class RootWidget {
 }
 
 Widget <|-- RootWidget
+
 
 
 @enduml

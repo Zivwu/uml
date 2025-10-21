@@ -2,4 +2,207 @@
 set namespaceSeparator ::
 
 
+abstract class BuildContext {
+  +Widget widget
+  +BuildOwner? owner
+  +bool mounted
+  +bool debugDoingBuild
+  +InvalidType size
+  +InvalidType findRenderObject()
+  +InheritedWidget dependOnInheritedElement()
+  +T? dependOnInheritedWidgetOfExactType()
+  +T? getInheritedWidgetOfExactType()
+  +InheritedElement? getElementForInheritedWidgetOfExactType()
+  +T? findAncestorWidgetOfExactType()
+  +T? findAncestorStateOfType()
+  +T? findRootAncestorStateOfType()
+  +T? findAncestorRenderObjectOfType()
+  +void visitAncestorElements()
+  +void visitChildElements()
+  +void dispatchNotification()
+  +InvalidType describeElement()
+  +InvalidType describeWidget()
+  +List<InvalidType> describeMissingAncestor()
+  +InvalidType describeOwnershipChain()
+}
+
+abstract class Element  extends BuildContext{
+  -Element? _parent
+  -_NotificationNode? _notificationTree
+  -Object? _slot
+  -int _depth
+  -Widget? _widget
+  -BuildOwner? _owner
+  -BuildScope? _parentBuildScope
+  -_ElementLifecycle _lifecycleState
+  -Set<Element>? _debugForgottenChildrenWithGlobalKey
+  -InvalidType _inheritedElements
+  -Set<InheritedElement>? _dependencies
+  -bool _hadUnsatisfiedDependencies
+  -bool _dirty
+  -bool _inDirtyList
+  -bool _debugBuiltOnce
+  +Object? slot
+  +int depth
+  +Widget widget
+  +bool mounted
+  +bool debugIsDefunct
+  +bool debugIsActive
+  +BuildOwner? owner
+  +BuildScope buildScope
+  +InvalidType renderObject
+  +Element? renderObjectAttachingChild
+  +InvalidType size
+  +bool dirty
+  +bool ==()
+  {static} -int _sort()
+  {static} -int _debugConcreteSubtype()
+  +void reassemble()
+  -bool _debugIsDescsendantOf()
+  +List<InvalidType> describeMissingAncestor()
+  {static} +InvalidType describeElements()
+  +InvalidType describeElement()
+  +InvalidType describeWidget()
+  +InvalidType describeOwnershipChain()
+  +void visitChildren()
+  +void debugVisitOnstageChildren()
+  +void visitChildElements()
+  +Element? updateChild()
+  +List<Element> updateChildren()
+  +void mount()
+  -void _debugRemoveGlobalKeyReservation()
+  +void update()
+  +void updateSlotForChild()
+  +void updateSlot()
+  -void _updateDepth()
+  -void _updateBuildScopeRecursively()
+  +void detachRenderObject()
+  +void attachRenderObject()
+  -Element? _retakeInactiveElement()
+  +Element inflateWidget()
+  -void _debugCheckForCycles()
+  +void deactivateChild()
+  +void forgetChild()
+  -void _activateWithParent()
+  {static} -void _activateRecursively()
+  +void activate()
+  +void deactivate()
+  +void debugDeactivated()
+  +void unmount()
+  +bool debugExpectsRenderObjectForSlot()
+  +InvalidType findRenderObject()
+  -bool _debugCheckStateIsActiveForAncestorLookup()
+  +bool doesDependOnInheritedElement()
+  +InheritedWidget dependOnInheritedElement()
+  +T? dependOnInheritedWidgetOfExactType()
+  +T? getInheritedWidgetOfExactType()
+  +InheritedElement? getElementForInheritedWidgetOfExactType()
+  +void attachNotificationTree()
+  -void _updateInheritance()
+  +T? findAncestorWidgetOfExactType()
+  +T? findAncestorStateOfType()
+  +T? findRootAncestorStateOfType()
+  +T? findAncestorRenderObjectOfType()
+  +void visitAncestorElements()
+  +void didChangeDependencies()
+  -bool _debugCheckOwnerBuildTargetExists()
+  +String debugGetCreatorChain()
+  +List<Element> debugGetDiagnosticChain()
+  +void dispatchNotification()
+  +String toStringShort()
+  +InvalidType toDiagnosticsNode()
+  +void debugFillProperties()
+  +List<InvalidType> debugDescribeChildren()
+  +void markNeedsBuild()
+  +void rebuild()
+  +void performRebuild()
+}
+
+
+
+abstract class ComponentElement extends Element {
+  -Element? _child
+  -bool _debugDoingBuild
+  +bool debugDoingBuild
+  +Element? renderObjectAttachingChild
+  +void mount()
+  -void _firstBuild()
+  +void performRebuild()
+  +Widget build()
+  +void visitChildren()
+  +void forgetChild()
+}
+
+class StatefulElement extends  ComponentElement{
+  -State<StatefulWidget>? _state
+  -bool _didChangeDependencies
+  +State<StatefulWidget> state
+  +Widget build()
+  +void reassemble()
+  -void _firstBuild()
+  +void performRebuild()
+  +void update()
+  +void activate()
+  +void deactivate()
+  +void unmount()
+  +InheritedWidget dependOnInheritedElement()
+  +void didChangeDependencies()
+  +InvalidType toDiagnosticsNode()
+  +void debugFillProperties()
+}
+
+abstract class RenderObjectElement extends Element {
+  -InvalidType _renderObject
+  -bool _debugDoingBuild
+  -RenderObjectElement? _ancestorRenderObjectElement
+  +InvalidType renderObject
+  +Element? renderObjectAttachingChild
+  +bool debugDoingBuild
+  -RenderObjectElement? _findAncestorRenderObjectElement()
+  -void _debugCheckCompetingAncestors()
+  -List<ParentDataElement<InvalidType>> _findAncestorParentDataElements()
+  +void mount()
+  +void update()
+  -void _debugUpdateRenderObjectOwner()
+  +void performRebuild()
+  -void _performRebuild()
+  +void deactivate()
+  +void unmount()
+  -void _updateParentData()
+  +void updateSlot()
+  +void attachRenderObject()
+  +void detachRenderObject()
+  +void insertRenderObjectChild()
+  +void moveRenderObjectChild()
+  +void removeRenderObjectChild()
+  +void debugFillProperties()
+}
+
+
+class SingleChildRenderObjectElement extends RenderObjectElement{
+  -Element? _child
+  +void visitChildren()
+  +void forgetChild()
+  +void mount()
+  +void update()
+  +void insertRenderObjectChild()
+  +void moveRenderObjectChild()
+  +void removeRenderObjectChild()
+}
+
+class MultiChildRenderObjectElement  extends RenderObjectElement{
+  -List<Element> _children
+  -Set<Element> _forgottenChildren
+  +InvalidType renderObject
+  +Iterable<Element> children
+  +void insertRenderObjectChild()
+  +void moveRenderObjectChild()
+  +void removeRenderObjectChild()
+  +void visitChildren()
+  +void forgetChild()
+  -bool _debugCheckHasAssociatedRenderObject()
+  +Element inflateWidget()
+  +void mount()
+  +void update()
+}
 @enduml
