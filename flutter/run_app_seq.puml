@@ -1,0 +1,45 @@
+@startuml
+!pragma layout smetana
+
+participant WidgetsBinding
+
+
+WidgetsBinding -> WidgetsBinding ++:attachToBuildOwner
+create  RootWidget
+WidgetsBinding -> RootWidget :new
+WidgetsBinding -> RootWidget ++:attach
+RootWidget -> RootWidget ++: createElement
+create  RootElement
+RootWidget -> RootElement : new
+return
+RootWidget -> RootElement ++:mount
+loop
+
+RootElement -> Element ++: super.mount
+return
+RootElement -> RootElement ++ :_rebuild
+RootElement -> Element  ++ :updateChild
+Element -> Element  ++ :inflateWidget
+
+
+Element -> Widget子类  ++ :createElement
+create Element子类
+Widget子类 -> Element子类 :new
+return Element子类
+
+Element -> Element子类 ++ :mount
+Element子类 -> Element  ++:super.mount
+return new Element子类
+note over Element子类: _child = Element
+return
+end
+return Element
+return Element
+note over RootElement: _child = Element
+return
+RootElement -> Element ++:super.performRebuild
+note over Element: _dirty = false
+return
+return
+return
+@enduml

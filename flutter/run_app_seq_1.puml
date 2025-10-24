@@ -2,19 +2,21 @@
 !pragma layout smetana
 
 participant WidgetsBinding
-participant RootWidget
-participant RootElement
-participant Element
 
 
-
-note over WidgetsBinding : 创建RootWidget
 WidgetsBinding -> WidgetsBinding ++:attachToBuildOwner
+create  RootWidget
+WidgetsBinding -> RootWidget :new
 WidgetsBinding -> RootWidget ++:attach
-RootWidget -> RootWidget ++:createElement
-return 返回RootElement
+RootWidget -> RootWidget ++: createElement
+create  RootElement
+RootWidget -> RootElement : new
+return
+
 RootWidget -> RootElement ++:mount
-RootElement -> RootElement :super.mount
+note over RootElement: 123
+RootElement -> Element ++: super.mount
+return
 RootElement -> RootElement ++ :_rebuild
 RootElement -> Element  ++ :updateChild
 Element -> Element  ++ :inflateWidget
