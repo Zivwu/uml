@@ -1,0 +1,35 @@
+@startuml
+'https://plantuml.com/class-diagram
+!pragma layout smetana
+
+
+
+abstract class BindingBase {
+  +void initInstances()
+}
+
+
+class WidgetsFlutterBinding extends BindingBase {
+ {static} +WidgetsBinding ensureInitialized()
+}
+
+WidgetsBinding <|.. WidgetsFlutterBinding :with 7
+RendererBinding <|.. WidgetsFlutterBinding :with 6
+SemanticsBinding <|.. WidgetsFlutterBinding:with 5
+PaintingBinding <|.. WidgetsFlutterBinding:with 4
+ServicesBinding <|.. WidgetsFlutterBinding:with 3
+SchedulerBinding <|.. WidgetsFlutterBinding:with 2
+GestureBinding <|.. WidgetsFlutterBinding:with 1
+
+interface WidgetsBinding{
+    BuildOwner? buildOwner
+    Element?  rootElement
+    {static} +WidgetsBinding get instance
+    + void initInstances()
+    + void drawFrame()
+    + void attachRootWidget()
+    + void attachToBuildOwner()
+}
+
+
+@enduml
