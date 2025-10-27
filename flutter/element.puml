@@ -133,6 +133,11 @@ abstract class ComponentElement extends Element {
   +void forgetChild()
 }
 
+class StatelessElement extends ComponentElement{
+  +Widget build()
+  +void update()
+}
+
 class StatefulElement extends  ComponentElement{
   -State<StatefulWidget>? _state
   -bool _didChangeDependencies
@@ -204,5 +209,12 @@ class MultiChildRenderObjectElement  extends RenderObjectElement{
   +Element inflateWidget()
   +void mount()
   +void update()
+}
+
+
+class RenderTreeRootElement extends RenderObjectElement{
+  +void attachRenderObject()
+  +void detachRenderObject()
+  +void updateSlot()
 }
 @enduml
