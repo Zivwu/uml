@@ -3,15 +3,17 @@
 
 participant WidgetsBinding
 
-
 WidgetsBinding -> WidgetsBinding ++:attachToBuildOwner
 create  RootWidget
 WidgetsBinding -> RootWidget :new
+autonumber 1.0
 WidgetsBinding -> RootWidget ++:attach
 RootWidget -> RootWidget ++: createElement
 create  RootElement
 RootWidget -> RootElement : new
 return
+
+autonumber 2.0
 loop 递归调用
 RootWidget -> RootElement ++:mount
 

@@ -11,6 +11,7 @@ abstract class Widget {
 }
 
 class RootWidget extends Widget {
+    + Widget? child;
     + RootElement createElement()
     + RootElement attach()
 }
@@ -33,5 +34,8 @@ abstract class Element implements BuildContext{
     + Object? slot
     + Widget? widget;
     + BuildOwner? owner;
+    + void mount()
+    + void updateChild()
+    + void inflateWidget()
 }
 @enduml
