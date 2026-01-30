@@ -217,4 +217,7 @@ class RenderTreeRootElement extends RenderObjectElement{
   +void detachRenderObject()
   +void updateSlot()
 }
+
+hide BuildContext members
+hide Element members
 @enduml
